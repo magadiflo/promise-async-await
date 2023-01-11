@@ -38,23 +38,38 @@ const continueGame = () => {
     });
 }
 
-const handleGuess = () => {
-    enterNumber()
-        .then(result => {
-            alert(`Dice: ${result.randomNumber}, Tú dijiste: ${result.userNumber}, entonces tienes ${result.points} puntos`);
+//** Método más largo */
+//* const handleGuess = () => {
+//*     enterNumber()
+//*         .then(result => {
+//*             alert(`Dice: ${result.randomNumber}, Tú dijiste: ${result.userNumber}, entonces tienes ${result.points} puntos`);
 
-            continueGame().then(result => {
-                if (result) {
-                    handleGuess();
-                } else {
-                    alert('Juego finalizado!');
-                }
-            });
-        })
-        .catch(error => alert(error));
+//*             continueGame().then(result => {
+//*                 if (result) {
+//*                     handleGuess();
+//*                 } else {
+//*                     alert('Juego finalizado!');
+//*                 }
+//*             });
+//*         })
+//*         .catch(error => alert(error));
+//* }
 
+//** Método refactorizado usando async - await */
+const handleGuess = async () => {
+    try {
+        const result = await enterNumber();
+        alert(`Dice: ${result.randomNumber}, Tú dijiste: ${result.userNumber}, entonces tienes ${result.points} puntos`);
 
-
+        const isContinue = await continueGame();
+        if (isContinue) {
+            handleGuess();
+        } else {
+            alert('Juego finalizado!');
+        }
+    } catch (error) {
+        alert(error)
+    }
 }
 
 const start = () => {
